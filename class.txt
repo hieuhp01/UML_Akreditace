@@ -253,3 +253,59 @@ class ClassificationLevelModel(BaseModel):
     name = Column(String)
     name_en = Column(String)
     ordervalue = Column(Integer)
+class SemesterModel(BaseModel):
+    """Aka Mathematics, 2nd semester"""
+
+    __tablename__ = "acsemesters"
+    id = UUIDColumn()
+    order = Column(Integer)
+    credits = Column(Integer)
+    subject_id = Column(ForeignKey("acsubjects.id"), index=True)
+    classificationtype_id = Column(ForeignKey("acclassificationtypes.id"), index=True)
+
+    created = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    changedby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    createdby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+
+class TopicModel(BaseModel):
+    """Aka Functions"""
+
+    __tablename__ = "actopics"
+    id = UUIDColumn()
+    name = Column(String)
+    name_en = Column(String)
+    order = Column(Integer)
+
+    semester_id = Column(ForeignKey("acsemesters.id"), index=True)
+
+    created = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    changedby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    createdby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+
+class LessonModel(BaseModel):
+    """Lecture, 2h,"""
+
+    __tablename__ = "aclessons"
+    id = UUIDColumn()
+    topic_id = Column(ForeignKey("actopics.id"), index=True)
+    type_id = Column(ForeignKey("aclessontypes.id"), index=True)
+    count = Column(Integer)
+
+    created = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    changedby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    createdby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+
+class LessonTypeModel(BaseModel):
+    __tablename__ = "aclessontypes"
+    id = UUIDColumn()
+    name = Column(String)
+    name_en = Column(String)
+    abbr = Column(String)
+
+    created = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now())
+    changedby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
+    createdby = UUIDFKey(nullable=True)#Column(ForeignKey("users.id"), index=True, nullable=True)
